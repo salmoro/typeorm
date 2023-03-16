@@ -116,6 +116,16 @@ export abstract class QueryBuilder<Entity extends ObjectLiteral> {
     // Abstract Methods
     // -------------------------------------------------------------------------
 
+    private static queryBuilderRegistry: Record<string, any> = {}
+
+    static registerQueryBuilderClass(name: string, factory: any) {
+        QueryBuilder.queryBuilderRegistry[name] = factory
+    }
+
+    // -------------------------------------------------------------------------
+    // Abstract Methods
+    // -------------------------------------------------------------------------
+
     /**
      * Gets generated SQL query without parameters being replaced.
      */
@@ -180,11 +190,9 @@ export abstract class QueryBuilder<Entity extends ObjectLiteral> {
         }
 
         // loading it dynamically because of circular issue
-        const SelectQueryBuilderCls =
-            require("./SelectQueryBuilder").SelectQueryBuilder
         if (InstanceChecker.isSelectQueryBuilder(this)) return this as any
 
-        return new SelectQueryBuilderCls(this)
+        return QueryBuilder.queryBuilderRegistry['SelectQueryBuilder'](this)
     }
 
     /**
@@ -194,11 +202,9 @@ export abstract class QueryBuilder<Entity extends ObjectLiteral> {
         this.expressionMap.queryType = "insert"
 
         // loading it dynamically because of circular issue
-        const InsertQueryBuilderCls =
-            require("./InsertQueryBuilder").InsertQueryBuilder
         if (InstanceChecker.isInsertQueryBuilder(this)) return this as any
 
-        return new InsertQueryBuilderCls(this)
+        return QueryBuilder.queryBuilderRegistry['InsertQueryBuilder'](this)
     }
 
     /**
@@ -256,12 +262,9 @@ export abstract class QueryBuilder<Entity extends ObjectLiteral> {
         this.expressionMap.queryType = "update"
         this.expressionMap.valuesSet = updateSet
 
-        // loading it dynamically because of circular issue
-        const UpdateQueryBuilderCls =
-            require("./UpdateQueryBuilder").UpdateQueryBuilder
         if (InstanceChecker.isUpdateQueryBuilder(this)) return this as any
 
-        return new UpdateQueryBuilderCls(this)
+        return QueryBuilder.queryBuilderRegistry['UpdateQueryBuilder'](this)
     }
 
     /**
@@ -270,34 +273,26 @@ export abstract class QueryBuilder<Entity extends ObjectLiteral> {
     delete(): DeleteQueryBuilder<Entity> {
         this.expressionMap.queryType = "delete"
 
-        // loading it dynamically because of circular issue
-        const DeleteQueryBuilderCls =
-            require("./DeleteQueryBuilder").DeleteQueryBuilder
         if (InstanceChecker.isDeleteQueryBuilder(this)) return this as any
 
-        return new DeleteQueryBuilderCls(this)
+        return QueryBuilder.queryBuilderRegistry['DeleteQueryBuilder'](this)
     }
 
     softDelete(): SoftDeleteQueryBuilder<any> {
         this.expressionMap.queryType = "soft-delete"
 
-        // loading it dynamically because of circular issue
-        const SoftDeleteQueryBuilderCls =
-            require("./SoftDeleteQueryBuilder").SoftDeleteQueryBuilder
         if (InstanceChecker.isSoftDeleteQueryBuilder(this)) return this as any
 
-        return new SoftDeleteQueryBuilderCls(this)
+        return QueryBuilder.queryBuilderRegistry['SoftDeleteQueryBuilder'](this)
     }
 
     restore(): SoftDeleteQueryBuilder<any> {
         this.expressionMap.queryType = "restore"
 
         // loading it dynamically because of circular issue
-        const SoftDeleteQueryBuilderCls =
-            require("./SoftDeleteQueryBuilder").SoftDeleteQueryBuilder
         if (InstanceChecker.isSoftDeleteQueryBuilder(this)) return this as any
 
-        return new SoftDeleteQueryBuilderCls(this)
+        return QueryBuilder.queryBuilderRegistry['SoftDeleteQueryBuilder'](this)
     }
 
     /**
@@ -335,12 +330,9 @@ export abstract class QueryBuilder<Entity extends ObjectLiteral> {
             this.expressionMap.setMainAlias(mainAlias)
         }
 
-        // loading it dynamically because of circular issue
-        const RelationQueryBuilderCls =
-            require("./RelationQueryBuilder").RelationQueryBuilder
         if (InstanceChecker.isRelationQueryBuilder(this)) return this as any
 
-        return new RelationQueryBuilderCls(this)
+        return QueryBuilder.queryBuilderRegistry['RelationQueryBuilder'](this)
     }
 
     /**

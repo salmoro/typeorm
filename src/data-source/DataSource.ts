@@ -26,6 +26,7 @@ import { EntityManagerFactory } from "../entity-manager/EntityManagerFactory"
 import { DriverFactory } from "../driver/DriverFactory"
 import { ConnectionMetadataBuilder } from "../connection/ConnectionMetadataBuilder"
 import { QueryRunner } from "../query-runner/QueryRunner"
+import { registerQueryBuilders} from "../query-builder"
 import { SelectQueryBuilder } from "../query-builder/SelectQueryBuilder"
 import { LoggerFactory } from "../logger/LoggerFactory"
 import { QueryResultCacheFactory } from "../cache/QueryResultCacheFactory"
@@ -40,6 +41,8 @@ import { RelationIdLoader } from "../query-builder/RelationIdLoader"
 import { DriverUtils } from "../driver/DriverUtils"
 import { InstanceChecker } from "../util/InstanceChecker"
 import { ObjectLiteral } from "../common/ObjectLiteral"
+
+registerQueryBuilders()
 
 /**
  * DataSource is a pre-defined connection configuration to a specific database.
