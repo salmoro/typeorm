@@ -36,7 +36,7 @@
       "import": "./*"
     }
   },
-  "main": "./index.js",
+  "main": "./build/package/index.js",
   "module": "./index.mjs",
   "types": "./index.d.ts",
   "browser": {
